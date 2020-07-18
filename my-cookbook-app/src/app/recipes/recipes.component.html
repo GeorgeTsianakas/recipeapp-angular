@@ -1,8 +1,16 @@
-<div  class="row">
+<div class="row">
   <div class="col-md-5">
-    <app-recipe-list></app-recipe-list>
+    <app-recipe-list
+      (selectItem)="onRecipeItemSelect($event)"
+    ></app-recipe-list>
   </div>
-  <div class="col-md-10">
-    <app-recipe-detail></app-recipe-detail>
+  <div class="col-md-7">
+    <app-recipe-details
+      *ngIf="currentRecipe; else defaultRecipeDetails"
+      [recipe]="currentRecipe"
+    ></app-recipe-details>
+    <ng-template #defaultRecipeDetails>
+    Please select a recipe
+    </ng-template>
   </div>
 </div>

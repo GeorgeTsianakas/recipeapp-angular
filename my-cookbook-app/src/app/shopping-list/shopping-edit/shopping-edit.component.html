@@ -1,22 +1,63 @@
 <div class="row">
   <div class="col-xs-12">
-    <h3>Shopping List Form</h3>
     <form>
       <div class="row">
-        <div class="col-sm-5 form-group">
+        <!-- Name -->
+        <div class="col-sm-6 form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" class="form-control">
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            placeholder="Ingredient name..."
+            #nameInput
+          >
         </div>
-        <div class="col-sm-2 form-group">
+        <!-- Amount -->
+        <div class="col-sm-3 form-group">
           <label for="amount">Amount</label>
-          <input type="number" id="amount" class="form-control">
+          <input
+            type="number"
+            id="amount"
+            class="form-control"
+            placeholder="Ingredient amount..."
+            #amountInput
+          >
+        </div>
+        <!-- Unit -->
+        <div class="col-sm-3 form-group">
+          <label for="amount">Unit</label>
+          <input
+            type="text"
+            id="unit"
+            class="form-control"
+            placeholder="Ingredient unit..."
+            #unitInput
+          >
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success">Add</button>
-          <button type="button" class="btn btn-danger">Delete</button>
-          <button type="button" class="btn btn-primary">Clear</button>
+          <button
+            class="btn btn-success"
+            type="submit"
+            (click)="onAdd()"
+          >
+            Add
+          </button>
+          <button
+            class="btn btn-danger mh-100"
+            type="button"
+          >
+            Delete
+          </button>
+
+          <button
+            class="btn btn-primary"
+            type="button"
+          >
+            Clear
+          </button>
         </div>
       </div>
     </form>
