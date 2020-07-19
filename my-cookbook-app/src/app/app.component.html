@@ -4,8 +4,12 @@
 <div class="container">
   <div class="row">
     <div class="col-xs-12">
-      <app-recipes *ngIf="feature === 'recipes'"></app-recipes>
-      <app-shopping-list *ngIf="feature === 'shopping-list'"></app-shopping-list>
+      <app-recipes
+        *ngIf="feature === 'recipes'"
+      ></app-recipes>
+      <app-shop
+        *ngIf="feature === 'shop'"
+      ></app-shop>
     </div>
   </div>
 </div>

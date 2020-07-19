@@ -1,7 +1,9 @@
 <div class="row">
   <div class="col-xs-12">
     <form>
+
       <div class="row">
+
         <!-- Name -->
         <div class="col-sm-6 form-group">
           <label for="name">Name</label>
@@ -9,10 +11,12 @@
             type="text"
             id="name"
             class="form-control"
-            placeholder="Ingredient name..."
+            placeholder="Name..."
+            [value]="item?.name"
             #nameInput
           >
         </div>
+
         <!-- Amount -->
         <div class="col-sm-3 form-group">
           <label for="amount">Amount</label>
@@ -20,10 +24,12 @@
             type="number"
             id="amount"
             class="form-control"
-            placeholder="Ingredient amount..."
+            placeholder="Amount..."
+            [value]="item?.amount"
             #amountInput
           >
         </div>
+
         <!-- Unit -->
         <div class="col-sm-3 form-group">
           <label for="amount">Unit</label>
@@ -31,35 +37,63 @@
             type="text"
             id="unit"
             class="form-control"
-            placeholder="Ingredient unit..."
+            placeholder="Unit..."
+            [value]="item?.unit"
             #unitInput
           >
         </div>
+
       </div>
+
       <div class="row">
         <div class="col-xs-12">
+
+          <!-- Submit -->
           <button
-            class="btn btn-success"
             type="submit"
-            (click)="onAdd()"
+            class="btn"
+            [ngClass]="{
+              'btn-success': !item,
+              'btn-info': item
+            }"
+            (click)="onSubmit()"
           >
-            Add
+            {{ item ? 'Update' : 'Create' }}
           </button>
+          &nbsp;
+
+          <!-- Deselect -->
           <button
-            class="btn btn-danger mh-100"
             type="button"
+            class="btn btn-default"
+            (click)="onDeselect()"
+          >
+            Deselect
+          </button>
+          &nbsp;
+
+          <!-- Delete -->
+          <button
+            type="button"
+            class="btn btn-default"
+            (click)="onDelete()"
           >
             Delete
           </button>
+          &nbsp;
 
+          <!-- Delete all -->
           <button
-            class="btn btn-primary"
+            class="btn btn-default"
             type="button"
+            (click)="onDeleteAll()"
           >
-            Clear
+            Delete all
           </button>
+
         </div>
       </div>
+
     </form>
   </div>
 </div>
