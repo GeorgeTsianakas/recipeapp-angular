@@ -1,4 +1,4 @@
-# angularCooking
+# angularCookbook
 This project is a new take on the front-end of the [recipeapp](https://github.com/GeorgeTsianakas/recipeapp) using Angular framework step by step.
 
 ## Angular Version
