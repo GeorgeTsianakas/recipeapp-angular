@@ -15,6 +15,7 @@ import {ErrorPageComponent} from "./error-page/error-page.component";
 import {RecipeDetailPlaceholderComponent} from "./recipes/recipe-detail-placeholder/recipe-detail-placeholder.component";
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
 import {ShoppingListService} from "./shopping-list/shopping-list.service";
+import {FormsModule} from "@angular/forms";
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {ShoppingListService} from "./shopping-list/shopping-list.service";
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule
   ],
   providers: [ShoppingListService],
