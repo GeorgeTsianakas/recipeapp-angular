@@ -1,17 +1,22 @@
 <nav class="navbar navbar-default">
   <div class="container-fluid">
+    <!-- Brand -->
     <div class="navbar-header">
       <a href="#" class="navbar-brand">Recipe Book</a>
     </div>
     <div class="collapse navbar-collapse">
+      <!-- Left menu -->
       <ul class="nav navbar-nav">
+        <!-- Recipes -->
         <li routerLinkActive="active">
           <a routerLink="/recipes">Recipes</a>
         </li>
+        <!-- Shopping list -->
         <li routerLinkActive="active">
           <a routerLink="/shopping-list">Shopping list</a>
         </li>
       </ul>
+      <!-- Right menu -->
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown" appDropdown>
           <a class="dropdown-toggle" role="button">

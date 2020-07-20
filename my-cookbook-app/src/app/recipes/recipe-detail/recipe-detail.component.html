@@ -18,7 +18,6 @@
 <!-- Actions -->
 <div class="row">
   <div class="col-xs-12">
-
     <div class="btn-group" appDropdown>
       <!-- Dropdown toggle -->
       <button type="button" class="btn btn-primary dropdown-toggle">
@@ -28,7 +27,7 @@
       <ul class="dropdown-menu">
         <li><a (click)="onAddToShoppingList()">To Shopping List</a></li>
         <li><a [routerLink]="['/recipes', id, 'edit']">Edit Recipe</a></li>
-        <li><a>Delete Recipe</a></li>
+        <li><a (click)="onDeleteRecipe()">Delete Recipe</a></li>
       </ul>
     </div>
   </div>

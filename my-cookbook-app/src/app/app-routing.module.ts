@@ -3,9 +3,8 @@ import {Routes, RouterModule} from '@angular/router';
 import {RecipesComponent} from "./recipes/recipes.component";
 import {RecipeDetailPlaceholderComponent} from "./recipes/recipe-detail-placeholder/recipe-detail-placeholder.component";
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
-import {RecipeDetailComponent} from "./recipes/recipe-detail/recipe-detail.component";
-import {RecipeResolverService} from "./recipes/recipe-resolver.service";
 import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
+import {RecipeDetailComponent} from "./recipes/recipe-detail/recipe-detail.component";
 import {ErrorPageComponent} from "./error-page/error-page.component";
 
 const routes: Routes = [
@@ -25,17 +24,17 @@ const routes: Routes = [
       },
       { // Select
         path: ':id',
-        component: RecipeDetailComponent,
-        resolve: {
-          recipe: RecipeResolverService
-        }
+        component: RecipeDetailComponent
+        // ,resolve: {
+        //   recipe: RecipeResolverService
+        // }
       },
       { // Edit
         path: ':id/edit',
-        component: RecipeEditComponent,
-        resolve: {
-          recipe: RecipeResolverService
-        }
+        component: RecipeEditComponent
+        // ,resolve: {
+        //   recipe: RecipeResolverService
+        // }
       },
     ]
   },
