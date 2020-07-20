@@ -2,6 +2,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
+import {HttpClientModule} from "@angular/common/http";
 import {AppRoutingModule} from "./app-routing.module";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ShoppingListService} from "./shopping-list/shopping-list.service";
@@ -17,6 +18,7 @@ import {ErrorPageComponent} from "./error-page/error-page.component";
 import {RecipeDetailPlaceholderComponent} from "./recipes/recipe-detail-placeholder/recipe-detail-placeholder.component";
 import {RecipeEditComponent} from './recipes/recipe-edit/recipe-edit.component';
 import {RecipeDetailComponent} from './recipes/recipe-detail/recipe-detail.component';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +39,8 @@ import {RecipeDetailComponent} from './recipes/recipe-detail/recipe-detail.compo
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [ShoppingListService, RecipeService],
   bootstrap: [AppComponent]
