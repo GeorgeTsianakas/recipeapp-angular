@@ -18,7 +18,6 @@ import {HeaderComponent} from "./header/header.component";
 import {AppComponent} from "./app.component";
 import {RecipeStartComponent} from "./recipes/recipe-start/recipe-start.component";
 import {AuthComponent} from './auth/auth.component';
-import {AuthService} from "./auth/auth.service";
 
 @NgModule({
   declarations: [
@@ -43,7 +42,7 @@ import {AuthService} from "./auth/auth.service";
     HttpClientModule,
     AppRoutingModule
   ],
-  providers: [ShoppingListService, RecipeService, AuthService],
+  providers: [ShoppingListService, RecipeService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
