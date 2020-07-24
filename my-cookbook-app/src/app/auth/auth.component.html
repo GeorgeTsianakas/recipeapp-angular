@@ -16,37 +16,37 @@
       <div class="form-group">
         <label for="email">E-Mail</label>
         <input
-          type="email"
-          id="email"
           class="form-control"
-          ngModel
-          name="email"
-          required
           email
+          id="email"
+          name="email"
+          ngModel
+          required
+          type="email"
         />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <input
-          type="password"
-          id="password"
           class="form-control"
-          ngModel
-          name="password"
-          required
+          id="password"
           minlength="6"
+          name="password"
+          ngModel
+          required
+          type="password"
         />
       </div>
       <div>
         <button
+          [disabled]="!authForm.valid"
           class="btn btn-primary"
           type="submit"
-          [disabled]="!authForm.valid"
         >
           {{ isLoginMode ? 'Login' : 'Sign Up' }}
         </button>
         |
-        <button class="btn btn-primary" (click)="onSwitchMode()" type="button">
+        <button (click)="onSwitchMode()" class="btn btn-primary" type="button">
           Switch to {{ isLoginMode ? 'Sign Up' : 'Login' }}
         </button>
       </div>
