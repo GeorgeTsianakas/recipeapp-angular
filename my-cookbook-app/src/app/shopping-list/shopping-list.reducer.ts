@@ -1,5 +1,5 @@
 import {Ingredient} from "../shared/model/ingredient.model";
-import { Action } from '@ngrx/store';
+import {Action} from '@ngrx/store';
 
 const initialState = {
   ingredients: [
