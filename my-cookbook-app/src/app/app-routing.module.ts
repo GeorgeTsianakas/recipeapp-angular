@@ -1,70 +1,39 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {RecipesComponent} from "./recipes/recipes.component";
-import {RecipeDetailPlaceholderComponent} from "./recipes/recipe-detail-placeholder/recipe-detail-placeholder.component";
 import {RecipeEditComponent} from "./recipes/recipe-edit/recipe-edit.component";
 import {ShoppingListComponent} from "./shopping-list/shopping-list.component";
 import {RecipeDetailComponent} from "./recipes/recipe-detail/recipe-detail.component";
-import {ErrorPageComponent} from "./error-page/error-page.component";
+import {RecipesResolverService} from "./recipes/recipe-resolver.service";
+import {RecipeStartComponent} from "./recipes/recipe-start/recipe-start.component";
+import {AuthComponent} from "./auth/auth.component";
 
-const routes: Routes = [
-
-  { // Recipes
+const appRoutes: Routes = [
+  {path: '', redirectTo: '/recipes', pathMatch: 'full'},
+  {
     path: 'recipes',
     component: RecipesComponent,
     children: [
-      { // No recipe selected
-        path: '',
-        pathMatch: 'full',
-        component: RecipeDetailPlaceholderComponent
-      },
-      { // Create
-        path: 'create',
-        component: RecipeEditComponent
-      },
-      { // Select
+      {path: '', component: RecipeStartComponent},
+      {path: 'new', component: RecipeEditComponent},
+      {
         path: ':id',
-        component: RecipeDetailComponent
-        // ,resolve: {
-        //   recipe: RecipeResolverService
-        // }
+        component: RecipeDetailComponent,
+        resolve: [RecipesResolverService]
       },
-      { // Edit
+      {
         path: ':id/edit',
-        component: RecipeEditComponent
-        // ,resolve: {
-        //   recipe: RecipeResolverService
-        // }
-      },
+        component: RecipeEditComponent,
+        resolve: [RecipesResolverService]
+      }
     ]
   },
-
-  { // Shopping list
-    path: 'shopping-list',
-    component: ShoppingListComponent
-  },
-
-  { // Home
-    path: '',
-    pathMatch: 'full',
-    redirectTo: 'recipes'
-  },
-
-  { // 404 error
-    path: '404',
-    component: ErrorPageComponent,
-    data: {message: 'Sorry, page not found!'}
-  },
-
-  { // The rest
-    path: '**',
-    redirectTo: '404'
-  }
-
+  {path: 'shopping-list', component: ShoppingListComponent},
+  {path: 'authenticate', component: AuthComponent}
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule]
 })
 export class AppRoutingModule {
