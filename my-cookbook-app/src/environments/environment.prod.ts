@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  // todo add Firebase API key here
+  firebaseAPIKey: ''
 };

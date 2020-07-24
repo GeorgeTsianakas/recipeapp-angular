@@ -1,138 +1,152 @@
-import {catchError} from 'rxjs/operators';
-import {Observable, throwError} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {Router} from '@angular/router';
+import {catchError, tap} from 'rxjs/operators';
+import {throwError, BehaviorSubject} from 'rxjs';
+import {environment} from '../../environments/environment';
 
-// https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
-interface ApiSignUpResponse {
-  idToken: string;	// A Firebase Auth ID token for the newly created user.
-  email: string;	// The email for the newly created user.
-  refreshToken: string;	// A Firebase Auth refresh token for the newly created user.
-  expiresIn: string;	// The number of seconds in which the ID token expires.
-  localId: string;	// The uid of the newly created user.
-}
+import {User} from './user.model';
 
-// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-interface ApiSignInResponse {
-  idToken: string;	// A Firebase Auth ID token for the authenticated user.
-  email: string;	// The email for the authenticated user.
-  refreshToken: string; // A Firebase Auth refresh token for the authenticated user.
-  expiresIn: string; // The number of seconds in which the ID token expires.
-  localId: string;	// The uid of the authenticated user.
-  registered: boolean;	// Whether the email is for an existing account.
-}
+export interface AuthResponseData {
 
-interface CustomError {
-  message: string;
+  kind: string;
+  idToken: string;
+  email: string;
+  refreshToken: string;
+  expiresIn: string;
+  localId: string;
+  registered?: boolean;
+
 }
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
 
-  // todo add the apiKey here
-  private apiKey = '';
+  user = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
-  constructor(
-    private http: HttpClient
+  constructor(private http: HttpClient, private router: Router) {
+  }
+
+  signup(email: string, password: string) {
+    return this.http
+      .post<AuthResponseData>(
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + environment.firebaseAPIKey,
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true
+        }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
+  }
+
+  login(email: string, password: string) {
+    return this.http
+      .post<AuthResponseData>(
+        'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + environment.firebaseAPIKey,
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true
+        }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
+        })
+      );
+  }
+
+  autoLogin() {
+    const userData: {
+      email: string;
+      id: string;
+      _token: string;
+      _tokenExpirationDate: string;
+    } = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      return;
+    }
+
+    const loadedUser = new User(
+      userData.email,
+      userData.id,
+      userData._token,
+      new Date(userData._tokenExpirationDate)
+    );
+
+    if (loadedUser.token) {
+      this.user.next(loadedUser);
+      const expirationDuration =
+        new Date(userData._tokenExpirationDate).getTime() -
+        new Date().getTime();
+      this.autoLogout(expirationDuration);
+    }
+  }
+
+  logout() {
+    this.user.next(null);
+    this.router.navigate(['/auth']);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
+  }
+
+  autoLogout(expirationDuration: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+    }, expirationDuration);
+  }
+
+  private handleAuthentication(
+    email: string,
+    userId: string,
+    token: string,
+    expiresIn: number
   ) {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
+    this.autoLogout(expiresIn * 1000);
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 
-  /**
-   * Registers a new user into the Firebase project
-   *
-   * @param email The user's email
-   * @param password The user's password
-   * @return Observable<ApiSignUpResponse|string>
-   */
-  signUp(email: string, password: string): Observable<ApiSignUpResponse | CustomError> {
-
-    const url = (
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp' +
-      `?key=${this.apiKey}`
-    );
-
-    const data = {
-      email,
-      password,
-      returnSecureToken: true
-    };
-
-    // https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
-    return this.http.post<ApiSignUpResponse | CustomError>(url, data).pipe(
-      catchError((response: any): Observable<CustomError> => {
-
-        let message = 'An error occurred.';
-
-        if (!response.error || !response.error.error) {
-          return throwError(message);
-        }
-
-        const errorKey = response.error.error.message;
-
-        switch (errorKey) {
-          case 'EMAIL_NOT_FOUND':
-            message = 'There is no user record corresponding to this identifier. The user may have been deleted.';
-            break;
-          case 'INVALID_PASSWORD':
-            message = 'The password is invalid or the user does not have a password.';
-            break;
-          case 'USER_DISABLED':
-            message = 'The user account has been disabled by an administrator.';
-            break;
-        }
-
-        const error = {message};
-
-        return throwError(error);
-
-      })
-    );
-  }
-
-  signIn(email: string, password: string): Observable<ApiSignInResponse | CustomError> {
-
-    const url = (
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword' +
-      `?key=${this.apiKey}`
-    );
-
-    const data = {
-      email,
-      password,
-      returnSecureToken: true
-    };
-
-    // https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
-    return this.http.post<ApiSignInResponse | CustomError>(url, data).pipe(
-      catchError((response: any): Observable<CustomError> => {
-
-        let message = 'An error occurred.';
-
-        if (!response.error || !response.error.error) {
-          return throwError(message);
-        }
-
-        const errorKey = response.error.error.message;
-
-        switch (errorKey) {
-          case 'EMAIL_EXISTS':
-            message = 'The email address is already in use by another account.';
-            break;
-          case 'OPERATION_NOT_ALLOWED':
-            message = 'Password sign-in is disabled for this project.';
-            break;
-          case 'TOO_MANY_ATTEMPTS_TRY_LATER':
-            message = 'We have blocked all requests from this device due to unusual activity.Try again later.';
-            break;
-        }
-
-        const error = {message};
-
-        return throwError(error);
-
-      })
-    );
-
+  private handleError(errorRes: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+    if (!errorRes.error || !errorRes.error.error) {
+      return throwError(errorMessage);
+    }
+    switch (errorRes.error.error.message) {
+      case 'EMAIL_EXISTS':
+        errorMessage = 'This email exists already';
+        break;
+      case 'EMAIL_NOT_FOUND':
+        errorMessage = 'This email does not exist.';
+        break;
+      case 'INVALID_PASSWORD':
+        errorMessage = 'This password is not correct.';
+        break;
+    }
+    return throwError(errorMessage);
   }
 
 }
