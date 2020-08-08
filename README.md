@@ -1,4 +1,4 @@
-# angularCookbook
+# angularCookbook ![](https://img.shields.io/badge/Framework-Angular-informational?style=flat&logo=angular)
 This project is a new take on the front-end of the [recipeapp](https://github.com/GeorgeTsianakas/recipeapp) using Angular framework step by step.
 
 ## Angular Version
