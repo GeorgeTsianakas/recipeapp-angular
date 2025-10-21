@@ -1,27 +1,18 @@
-# angularCookbook
+# angularCookbook (app)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.2.
+This is the Angular app located under the my-cookbook-app/ folder of the repository.
 
-## Development server
+For a full project overview, setup instructions, architecture notes, and troubleshooting, please refer to the root README:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- ../README.md
 
-## Code scaffolding
+## Quick start
+- npm install
+- npm start
+- Open http://localhost:4200
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Useful scripts
+- npm test — run unit tests (Karma + Jasmine)
+- npm run e2e — run end-to-end tests (Protractor)
+- npm run lint — run TSLint
+- npm run build — production build outputs to dist/
